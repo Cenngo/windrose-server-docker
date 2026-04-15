@@ -22,13 +22,7 @@ fi
 export WINEPREFIX="${WINEPREFIX:-$HOME/.wine}"
 export WINEARCH="${WINEARCH:-win64}"
 export WINEDEBUG="${WINEDEBUG:-fixme-all}"
-
-# Bootstrap Wine if not already initialized
-if [ ! -f "$WINEPREFIX/system.reg" ]; then
-    LogInfo "Initializing Wine prefix..."
-    xvfb-run --auto-servernum bash -c "winecfg -v win10 >/dev/null 2>&1; wineboot --init >/dev/null 2>&1"
-    LogInfo "Wine initialized: $(wine --version)"
-fi
+export WINEDLLOVERRIDES="mscoree,mshtml="
 
 # First run: start server briefly to generate ServerDescription.json
 if [ "${GENERATE_SETTINGS:-true}" = "false" ]; then

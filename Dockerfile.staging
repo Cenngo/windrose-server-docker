@@ -15,14 +15,20 @@ RUN dpkg --add-architecture i386 && \
     xvfb \
     xauth \
     jq \
+    cabextract \
     && curl -fsSL https://dl.winehq.org/wine-builds/winehq.key | \
         gpg --dearmor -o /usr/share/keyrings/winehq-archive.key \
     && echo "deb [arch=amd64,i386 signed-by=/usr/share/keyrings/winehq-archive.key] https://dl.winehq.org/wine-builds/debian/ bookworm main" \
         > /etc/apt/sources.list.d/winehq.list \
     && apt-get update \
-    && apt-get install -y --install-recommends winehq-stable \
+    && apt-get install -y --install-recommends winehq-staging \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# Install winetricks
+RUN curl -fsSL https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
+        -o /usr/local/bin/winetricks && \
+    chmod +x /usr/local/bin/winetricks
 
 # Install .NET 8 runtime (required for DepotDownloader)
 RUN curl -sL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh && \
@@ -50,7 +56,7 @@ ENV WINEPREFIX=/home/steam/.wine \
     DISPLAY=:0
 RUN Xvfb :0 -screen 0 1024x768x16 & \
     sleep 2 && \
-    su -l steam -c "WINEPREFIX=/home/steam/.wine WINEARCH=win64 WINEDLLOVERRIDES='mscoree,mshtml=' winecfg -v win10 >/dev/null 2>&1; wineboot --init >/dev/null 2>&1" && \
+    su -l steam -c "WINEPREFIX=/home/steam/.wine WINEARCH=win64 WINEDLLOVERRIDES='mscoree,mshtml=' winetricks -q win10 vcrun2022" && \
     kill %1 2>/dev/null; true
 
 ENV HOME=/home/steam \
