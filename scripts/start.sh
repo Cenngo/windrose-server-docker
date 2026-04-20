@@ -64,7 +64,7 @@ if [ "${GENERATE_SETTINGS:-true}" != "false" ]; then
         --argjson directconn   "${USE_DIRECT_CONNECTION:-false}" \
         --argjson serverport   "${SERVER_PORT:-7777}" \
         --arg dcproxy          "${DIRECT_CONNECTION_PROXY_ADDRESS:-0.0.0.0}" \
-        --arg region           "${USER_SELECTED_REGION:-EU}" \
+        --arg region           "${USER_SELECTED_REGION:-}" \
         --arg name             "${SERVER_NAME}" \
         --arg password         "${SERVER_PASSWORD:-}" \
         --argjson maxplayers   "${MAX_PLAYERS:-10}" \
