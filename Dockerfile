@@ -1,5 +1,5 @@
 # BUILD THE SERVER IMAGE
-FROM --platform=linux/amd64 debian:bookworm-slim
+FROM --platform=linux/arm64 debian:bookworm-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -17,7 +17,7 @@ RUN dpkg --add-architecture i386 && \
     jq \
     && curl -fsSL https://dl.winehq.org/wine-builds/winehq.key | \
         gpg --dearmor -o /usr/share/keyrings/winehq-archive.key \
-    && echo "deb [arch=amd64,i386 signed-by=/usr/share/keyrings/winehq-archive.key] https://dl.winehq.org/wine-builds/debian/ bookworm main" \
+    && echo "deb [arch=arm64,i386 signed-by=/usr/share/keyrings/winehq-archive.key] https://dl.winehq.org/wine-builds/debian/ bookworm main" \
         > /etc/apt/sources.list.d/winehq.list \
     && apt-get update \
     && apt-get install -y --install-recommends winehq-stable \
@@ -34,7 +34,7 @@ RUN curl -sL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh && \
 # Download DepotDownloader
 ARG DEPOT_DOWNLOADER_VERSION=3.4.0
 RUN curl -sL \
-    "https://github.com/SteamRE/DepotDownloader/releases/download/DepotDownloader_${DEPOT_DOWNLOADER_VERSION}/DepotDownloader-linux-x64.zip" -o \
+    "https://github.com/SteamRE/DepotDownloader/releases/download/DepotDownloader_${DEPOT_DOWNLOADER_VERSION}/DepotDownloader-linux-arm64.zip" -o \
     /tmp/dd.zip && \
     mkdir -p /depotdownloader && \
     unzip /tmp/dd.zip -d /depotdownloader && \
